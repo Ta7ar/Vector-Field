@@ -227,10 +227,10 @@ export default class Graph extends Component {
                     </canvas>
                     
                 </div>
-                <br/>
+                
                 <Equation seti={this.seti} setj={this.setj}/>
                 {this.state.invalidEqn && 
-                <p style={{margin:"0 auto",color:"red"}} >Invalid Equation</p>}
+                <p style={{margin:"0 auto",color:"red"}} >Invalid Equation </p>}
                 <br/>
                 <Button onClick={this.generateVectors}>Generate</Button>
                 

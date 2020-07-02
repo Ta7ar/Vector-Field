@@ -16,7 +16,7 @@ function App() {
       <div className="App">
         
           <Graph />
-          <br/>
+          
           <Footer/>
         
       </div>

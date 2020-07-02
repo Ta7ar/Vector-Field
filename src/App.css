@@ -16,3 +16,17 @@
     margin: 0 auto;
     padding-bottom: 2.5vw;
 }
+
+@media(orientation: landscape){
+    .graph-container {
+        width: 60vh;
+        height: 60vh;
+        
+        
+    }
+    .equation{
+        
+        width: 60vh;
+        
+    }
+}
