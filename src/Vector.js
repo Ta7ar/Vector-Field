@@ -1,14 +1,12 @@
 export default class Vector {
-    constructor(ctx,i,j,originx,originy,vectorLen){
+    constructor(ctx,i,j){
         this.ctx = ctx;
         this.i = i;
         this.j = j;
-        this.originx = originx;
-        this.originy = originy;
-        this.vectorLen = vectorLen;
+        
     }
 
-    draw = (calcAngle) => {
+    draw = (originx,originy,vectorLen) => {
 
         /* if i and j are both 0 then the vector is just a dot*/
 
@@ -17,29 +15,29 @@ export default class Vector {
             let ctx = this.ctx;
             ctx.resetTransform();
             ctx.beginPath();
-            ctx.arc(this.originx,this.originy,this.vectorLen*0.15,0,2*Math.PI);
+            ctx.arc(originx,originy,vectorLen*0.15,0,2*Math.PI);
             ctx.strokeStyle = "blue";
             ctx.fillStyle = "blue";
             ctx.fill();
             ctx.stroke();
         }
         else {
-            let angle = calcAngle(this.i,this.j);
-            let arrowLen = this.vectorLen * 0.2;
+            let angle = this.calcAngle(this.i,this.j);
+            let arrowLen = vectorLen * 0.2;
             let ctx = this.ctx;
 
             ctx.resetTransform();
             ctx.beginPath();
-            ctx.translate(this.originx,this.originy);
+            ctx.translate(originx,originy);
             ctx.rotate(-angle);
 
             
             ctx.lineWidth = 2;
             ctx.moveTo(0,0);
-            ctx.lineTo(this.vectorLen,0);
-            ctx.lineTo(this.vectorLen-arrowLen,arrowLen);
-            ctx.moveTo(this.vectorLen,0);
-            ctx.lineTo(this.vectorLen-arrowLen,-arrowLen);
+            ctx.lineTo(vectorLen,0);
+            ctx.lineTo(vectorLen-arrowLen,arrowLen);
+            ctx.moveTo(vectorLen,0);
+            ctx.lineTo(vectorLen-arrowLen,-arrowLen);
             ctx.strokeStyle = "blue";
             ctx.stroke();
         
@@ -47,6 +45,40 @@ export default class Vector {
 
         
 
+    }
+
+    
+
+    calcAngle=(x,y)=>{
+        if(x>0 && y>0){
+            return Math.atan(y/x);
+        }
+        else if(x<0 && y> 0){
+            return Math.PI - Math.atan(y/(-1*x));
+        }
+        else if(x<0 && y<0){
+            return Math.PI + Math.atan(y/x);
+        }
+        else if(x>0 && y<0){
+            return 2*Math.PI - Math.atan(-y/x);
+        }
+        else if(x===0){
+            if(y>0){
+                return Math.PI/2;
+            }
+            else if (y<0){
+                return 1.5* Math.PI;
+            }
+        }
+
+        else if(y===0){
+            if(x>0){
+                return 0;
+            }
+            else if(x<0){
+                return Math.PI;
+            }
+        }
     }
 
     

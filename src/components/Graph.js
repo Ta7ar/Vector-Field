@@ -102,59 +102,27 @@ export default class Graph extends Component {
     }
 
     drawVectors = () => {
-        if(!this.state.invalidEqn){
-            this.ctx.clearRect(0,0,this.canvasLen,this.canvasLen);
-            this.fillCanvas();
-            this.drawGrid();
-
-            this.state.vectorArray.forEach(v => {v.draw(this.calcAngle)})
+        if(!this.state.invalidEqn && this.state.vectorArray.length != 0){
+            let i = 0;
+            for(let y=-5; y<6; y+=1){
+                for(let x=-5; x<6; x+=1){
+                    let x_canvas = (x+6)*this.gridSpacing;
+                    let y_canvas = this.canvasLen - (y+6)*this.gridSpacing;
+                    this.state.vectorArray[i].draw(x_canvas,y_canvas,this.vectorLen);
+                    i += 1;
+                }
+            }
         }
    
     }
 
-    calcAngle=(x,y)=>{
-        if(x>0 && y>0){
-            return Math.atan(y/x);
-        }
-        else if(x<0 && y> 0){
-            return Math.PI - Math.atan(y/(-1*x));
-        }
-        else if(x<0 && y<0){
-            return Math.PI + Math.atan(y/x);
-        }
-        else if(x>0 && y<0){
-            return 2*Math.PI - Math.atan(-y/x);
-        }
-        else if(x===0){
-            if(y>0){
-                return Math.PI/2;
-            }
-            else if (y<0){
-                return 1.5* Math.PI;
-            }
-        }
-
-        else if(y===0){
-            if(x>0){
-                return 0;
-            }
-            else if(x<0){
-                return Math.PI;
-            }
-        }
-    }
+    
 
     generateVectors = () => {
 
         this.state.vectorArray = [];
         for(let y=-5; y<6; y+=1){
             for(let x=-5; x<6; x+=1){
-
-                /* translate cartesian x,y values into corresponding canvas coordinates*/
-
-                
-                let x_canvas = (x+6)*this.gridSpacing;
-                let y_canvas = this.canvasLen - (y+6)*this.gridSpacing;
 
                 /*calculate i and j values using equation*/
                 let i,j;
@@ -174,12 +142,14 @@ export default class Graph extends Component {
 
                     if(i===undefined || j===undefined){
                         this.setState({invalidEqn:true});
+                        return ;
+                        //end execution if either i or j is undefined
                     }
                     else{
                         this.state.vectorArray.push(
-                            new Vector(this.ctx,i,j,x_canvas,y_canvas,this.vectorLen)
+                            new Vector(this.ctx,i,j)
                         )
-                        this.setState({invalidEqn:false},this.drawVectors);
+                        
                     }
 
                     
@@ -187,21 +157,26 @@ export default class Graph extends Component {
                 }
                 catch(err){
                     this.setState({invalidEqn:true});
+                    return;
+                    //end execution if expression cannot be evaluated
+
                 }
 
                 
             }
         }
+        this.setState({invalidEqn:false},this.drawVectors);
         
 
     }
+
     
     
 
     componentDidMount(){
         this.fillCanvas();
         this.drawGrid();
-        this.drawVectors();
+        
         window.addEventListener("resize",()=>{
             /*clear canvas first*/
             
@@ -209,9 +184,12 @@ export default class Graph extends Component {
             
 
             /*on window resize re initialize the drawing*/
+            
             this.fillCanvas();
             this.drawGrid();
-            this.generateVectors();
+            this.drawVectors();
+            
+           
         });
 
         
