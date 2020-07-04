@@ -1,5 +1,5 @@
 export default class Vector {
-    constructor(ctx,i,j){
+    constructor(ctx, i, j) {
         this.ctx = ctx;
         this.i = i;
         this.j = j;
@@ -48,7 +48,7 @@ export default class Vector {
 
     
 
-    function calcAngle(x, y) {
+    calcAngle = (x, y) => {
         if (x === 0 && y === 0) {
             return null;
         } else if (x > 0 && y > 0) {
